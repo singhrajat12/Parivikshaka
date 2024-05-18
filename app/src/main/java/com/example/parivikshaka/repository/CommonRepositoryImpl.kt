@@ -10,6 +10,7 @@ import com.example.parivikshaka.models.AuthRequest
 
 import com.example.parivikshaka.models.Sampledata
 import com.example.parivikshaka.models.User
+import com.example.parivikshaka.models.VerifyOtpRequest
 //import com.example.parivikshaka.models.User
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -27,6 +28,10 @@ class CommonRepositoryImpl @Inject constructor(
 
     fun getLoginOtp(authRequest: AuthRequest): Flow<ApiState<User>> = toResultFlow {
         apiService.login(authRequest)
+    }
+
+    fun getVerifyOtp(verifyRequest: VerifyOtpRequest) = toResultFlow {
+        apiService.getVerifyOtpFromServer(verifyRequest)
     }
 
 

@@ -5,17 +5,13 @@ import android.Manifest
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
-import android.text.InputFilter
 import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.OnBackPressedCallback
-import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.parivikshaka.R
@@ -91,7 +87,7 @@ class FragmentLogin : Fragment() {
         binding.LoginBtn.setOnClickListener {
             callingOtpApi()
         }
-        requestPermissions()
+//        requestPermissions()
 
 
     }
@@ -99,57 +95,62 @@ class FragmentLogin : Fragment() {
     private fun callingOtpApi() {
         lifecycleScope.launchWhenStarted {
             viewmodal.fetchingOtpApi(
-
                 AuthRequest(
-                   AuthUsername = "AgriDept",
+                    AuthUsername = "AgriDept",
                     AuthPassword = "AD@432!",
                     Username = binding.etEmail.text.toString(),
                     Password = binding.etPassword.text.toString()
                 )
             ).collect { state ->
-                when(state){
-                    is  ApiState.Loading ->{
-//                        binding.progressBar.visibility=View.VISIBLE
+                when (state) {
+                    is ApiState.Loading -> {
+                        // Show loading indicator if needed
+                        // binding.progressBar.visibility = View.VISIBLE
                     }
 
+                    is ApiState.Success -> {
+                        // Hide loading indicator if needed
+                        // binding.progressBar.visibility = View.GONE
 
-                    is ApiState.Success ->{
-//                        binding.progressBar.visibility=View.GONE
-                        when (state.data.Status) {
-                            true.toString() -> {
-                                Bundle().let {
-                                    it.putString("Username" , binding.etEmail.text.toString())
-                                    it.putString("Password" , binding.etPassword.text.toString())
-                                    findNavController().navigate(R.id.otpLoginToOtpSend , it)
+                        Log.d("API Response", "Success: ${state.data}")
+
+                        when (state.data.Status?.toUpperCase()) {
+                            "SUCCESS" -> {
+                                val bundle = Bundle().apply {
+                                    putString("Username", binding.etEmail.text.toString())
+                                    putString("Password", binding.etPassword.text.toString())
                                 }
-
+                                findNavController().navigate(R.id.otpLoginToOtpSend, bundle)
                             }
-                            false.toString() -> {
-                                //   findNavController().navigate(R.id.otpLoginToOtpSend)
-                                requireContext().showToast("User not exist")
-
-//                                binding.tvError.visibility = View.VISIBLE
-                                //  binding.tvError.text = state.data.data.res?.response.toString()
+                            "FAILURE" -> {
+                                requireContext().showToast("User does not exist")
+                                // Show error message if needed
+                                // binding.tvError.visibility = View.VISIBLE
+                                // binding.tvError.text = state.data.Message
                             }
                             else -> {
-                                requireContext().showToast("${state.data.Message.toString()}")
+                                requireContext().showToast(state.data.Message ?: "Unknown error")
                             }
-
                         }
-
                     }
-                    is ApiState.Failure ->{
-//                        binding.progressBar.visibility=View.GONE
-                        Log.d("enterOtp", "callingOtpApi: $state")
-                        requireContext().showToast("Something went Wrong")
+
+                    is ApiState.Failure -> {
+                        // Hide loading indicator if needed
+                        // binding.progressBar.visibility = View.GONE
+
+                        Log.d("enterOtp", "callingOtpApi: ${state.msg}")
+                        requireContext().showToast("Something went wrong")
                     }
 
                     is ApiState.Error -> {
+                        // Hide loading indicator if needed
+                        // binding.progressBar.visibility = View.GONE
 
+                        Log.d("API Error", "Error: ${state.errorCode}")
+                        requireContext().showToast("An error occurred")
                     }
                 }
             }
-
         }
     }
 

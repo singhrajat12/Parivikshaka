@@ -10,3 +10,5 @@ class VerifyOtpResponse (
     @SerializedName("Code") var Code : String? = null,
 
 )
+
+

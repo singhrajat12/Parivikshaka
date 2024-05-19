@@ -9,3 +9,4 @@ data class VerifyOtpRequest(
     @SerializedName("UserId") var UserId: String? = null,
 
 )
+

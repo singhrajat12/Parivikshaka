@@ -16,6 +16,14 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
+    private var DistrictId: Int? = null
+    private var FinancialYearID: Int? = null
+    private var HobliId: Int? = null
+    private var RoleID: Int? = null
+    private var TalukId: Int? = null
+    private var TypeId: Int? = null
+    private var Username:String?=null
+    private var Password:String?=null
 
     companion object {
         fun newInstance() = HomeFragment()
@@ -34,6 +42,18 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+//        arguments?.let {
+//            DistrictId = it.getInt("DistrictId")
+//            FinancialYearID = it.getInt("FinancialYearID")
+//            HobliId = it.getInt("HobliId")
+//            RoleID = it.getInt("RoleID")
+//            TalukId = it.getInt("TalukId")
+//            TypeId = it.getInt("TypeId")
+//            Username= it.getString("Username")
+//            Password= it.getString("Password")
+//
+//        }
+
         // Set up the onBackPressedCallback to intercept the back button press
         onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -42,8 +62,9 @@ class HomeFragment : Fragment() {
         }
 
 
-        binding.CardSample.setOnClickListener {
-            findNavController().navigate(R.id.action_fragment_home_to_fragment_Sample)
+        binding.clothingCard.setOnClickListener {
+
+            findNavController().navigate(R.id.action_fragment_home_to_cardSampleFragment)
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)

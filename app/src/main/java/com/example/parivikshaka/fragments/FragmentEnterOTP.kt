@@ -40,6 +40,7 @@ class FragmentEnterOTP : Fragment() {
     private var UserId: String? = null
     private var Username:String?=null
     private var Password:String?=null
+    private var userid:String?=null
     var otpget:String?=null
 
 
@@ -54,6 +55,9 @@ class FragmentEnterOTP : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         arguments?.let {
             number = it.getString("MobileNo")
+            Username= it.getString("Username")
+            Password= it.getString("Password")
+            userid=it.getString("userid")
             mBinding.otpTxt.text = "Enter the 4 digit OTP sent to you at $number"
         }
         mBinding.backButton.setOnClickListener {
@@ -73,7 +77,6 @@ class FragmentEnterOTP : Fragment() {
                 }else{
                     requireContext().showToast("Invalid OTP ")
                 }
-
             }
         }
         onClick()
@@ -111,68 +114,19 @@ class FragmentEnterOTP : Fragment() {
     }
 
     private fun resendOtp() {
-        lifecycleScope.launchWhenStarted {
-            viewmodal.fetchingOtpApi(
-                AuthRequest(
-                    AuthUsername = "AgriDept",
-                    AuthPassword = "AD@432!",
-                    Username = Username,
-                    Password = Password
-                )
-            ).collect { state ->
-                when(state){
-                    is  ApiState.Loading ->{
-//                            mBinding.progressBar.visibility=View.VISIBLE
-                    }
-
-                    is ApiState.Success ->{
-//                           mBinding.progressBar.visibility=View.GONE
-                        when (state.data.Status) {
-                            "true" -> {
-                                Bundle().let {
-                                }
-                                Log.d("resend", "${state.data.Status.toString()}")
-
-                            }
-                            "false" -> {
-
-
-                            }
-                            else -> {
-
-                            }
-                        }
-                    }
-                    is ApiState.Failure ->{
-//                           mBinding.progressBar.visibility=View.GONE
-
-                    }
-
-                    is ApiState.Error ->{
-
-                    }
-                }
-            }
-
-        }
+        apiCallVerifyOtp()
 
     }
 
     private fun apiCallVerifyOtp() {
-        val hardcodedOtp = "1234" // Ensure this is only for debugging and not used in production
-        val enteredOtp = "${mBinding.inputCode1.text}${mBinding.inputCode2.text}${mBinding.inputCode3.text}${mBinding.inputCode4.text}"
-
-        // Check if UserId and MobileNo are not null
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 mViewModal.fetchingVerifyOtpApi2(
                     VerifyOtpRequest(
                         UserName = "AgriDept",
                         Password = "AD@432!",
-                        MobileNo = "9535792314",
-                        UserId ="RSK010101",
-//                        OTP = enteredOtp // Include OTP in the request
+                        MobileNo = number,
+                        UserId =userid,
                     )
                 ).collect { state: ApiState<VerifyOtpResponse> ->
                     when (state) {
@@ -182,11 +136,11 @@ class FragmentEnterOTP : Fragment() {
                         is ApiState.Success -> {
                             mBinding.mainProgressBar.visibility = View.GONE
                             when (state.data.Status) {
-                                "true" -> {
+                                "SUCCESS" -> {
                                      otpget=state.data.OTP
 
                                 }
-                                "false" -> {
+                                "FAILURE" -> {
                                     requireContext().showToast("OTP Not Found")
                                 }
 
@@ -245,53 +199,4 @@ class FragmentEnterOTP : Fragment() {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-//    companion object {
-//        fun newInstance() = FragmentEnterOTP()
-//    }
-//
-//    private var _binding: FragmentOtpEnterBinding? = null
-//    private val binding get() = _binding!!
-//
-//    private val viewModel: FragmentEnterOTViewModel by viewModels()
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View {
-//        _binding = FragmentOtpEnterBinding.inflate(inflater, container, false)
-//        return binding.root
-//    }
-//
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//
-//        binding.btnContinue.setOnClickListener {
-//            findNavController().navigate(R.id.action_fragment_otp_enter_to_fragment_home)
-//        }
-//
-//        binding.backButton.setOnClickListener {
-//            findNavController().navigate(R.id.otpnter_otp_login)
-//        }
-//
-//
-//    }
-//
-//
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        _binding = null
-//    }
-//}
 

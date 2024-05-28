@@ -16,26 +16,25 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 
 
-
-
-
 @HiltViewModel
-class SampleViewModel @Inject constructor(private var commonRepositoryImpl: CommonRepositoryImpl) : ViewModel() {
+class SampleViewModel @Inject constructor(
+    private val repository: CommonRepositoryImpl
+) : ViewModel() {
 
-private val _sampleItems = MutableLiveData<List<Sampledata>>()
+    private val _sampleItems = MutableLiveData<List<Sampledata>>()
     val sampleItems: LiveData<List<Sampledata>> get() = _sampleItems
 
-    fun fetchSampleItems(){
-        viewModelScope.launch {
-            try {
-                val items = commonRepositoryImpl.fetchItems()
-                _sampleItems.value = items
-            }catch (e: Exception){
-
-            }
-        }
+    init {
+        fetchSampleItems()
     }
 
+    fun fetchSampleItems() {
+        viewModelScope.launch {
+            // Simulating data fetching
+            val items = repository.fetchItems()
+            _sampleItems.postValue(items)
+        }
+    }
 }
 
 

@@ -9,6 +9,8 @@ import com.example.parivikshaka.db.toResultFlow
 import com.example.parivikshaka.models.AuthRequest
 
 import com.example.parivikshaka.models.Sampledata
+import com.example.parivikshaka.models.TargetListRequest
+import com.example.parivikshaka.models.TargetRequest
 import com.example.parivikshaka.models.User
 import com.example.parivikshaka.models.VerifyOtpRequest
 //import com.example.parivikshaka.models.User
@@ -40,6 +42,19 @@ class CommonRepositoryImpl @Inject constructor(
         return apiService.getItems()
 
     }
+
+//    suspend fun fetchCardItem(): List<CardSampleData>{
+//        return apiService.fetchCardItems()
+//    }
+
+    fun getTargetData(verifyTarget: TargetRequest) = toResultFlow {
+        apiService.getTarget(verifyTarget)
+    }
+
+    fun getTargetListData(verifyTarget: TargetListRequest) = toResultFlow {
+        apiService.getTargetList(verifyTarget)
+    }
+
 
 
 }

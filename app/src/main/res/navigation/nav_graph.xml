@@ -59,10 +59,9 @@
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
 
-
         <action
-            android:id="@+id/action_fragment_home_to_fragment_Sample"
-            app:destination="@id/fragment_Sample" />
+            android:id="@+id/action_fragment_home_to_cardSampleFragment"
+            app:destination="@id/cardSampleFragment" />
     </fragment>
 
     <fragment
@@ -72,5 +71,18 @@
         tools:layout="@layout/fragment_sample">
 
     </fragment>
+    <fragment
+        android:id="@+id/cardSampleFragment"
+        android:name="com.example.parivikshaka.fragments.CardSampleFragment"
+        android:label="CardSampleFragment"
+        tools:layout="@layout/fragment_card_sample" >
+
+
+        <action
+            android:id="@+id/action_cardSampleFragment_to_fragment_Sample"
+            app:destination="@id/fragment_Sample" />
+    </fragment>
+
+
 
 </navigation>

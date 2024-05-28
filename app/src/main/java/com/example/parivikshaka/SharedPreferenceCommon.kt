@@ -27,6 +27,8 @@ class  SharedPreferenceCommon @Inject constructor(@ApplicationContext mContext: 
         return mPrefs.getString("token","").toString()
     }
 
+
+
 //    fun setUserData(userInfo:String){
 //        mPrefs.edit().putString("userInfo",userInfo).apply()
 //    }

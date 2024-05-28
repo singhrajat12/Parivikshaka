@@ -1,6 +1,9 @@
 package com.example.parivikshaka.fragments
 
 
+
+/*  Code Written by Rajat Singh    */
+
 import android.Manifest
 import android.graphics.Color
 import android.os.Bundle
@@ -109,8 +112,6 @@ class FragmentLogin : Fragment() {
                     }
 
                     is ApiState.Success -> {
-                        // Hide loading indicator if needed
-                        // binding.progressBar.visibility = View.GONE
 
                         Log.d("API Response", "Success: ${state.data}")
 
@@ -119,6 +120,8 @@ class FragmentLogin : Fragment() {
                                 val bundle = Bundle().apply {
                                     putString("Username", binding.etEmail.text.toString())
                                     putString("Password", binding.etPassword.text.toString())
+                                    putString("MobileNo", binding.etEmail.text.toString())
+                                    putString("userid", state.data.UserId)
                                 }
                                 findNavController().navigate(R.id.otpLoginToOtpSend, bundle)
                             }
@@ -179,142 +182,6 @@ class FragmentLogin : Fragment() {
 
 
 
-
-
-
-
-
-//    private var _binding: FragmentLoginBinding? = null
-//    private val binding get() = _binding!!
-//    private lateinit var onBackPressedCallback: OnBackPressedCallback
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        _binding = FragmentLoginBinding.inflate(inflater, container, false)
-//        return binding.root
-//    }
-//
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//        onBackPressedCallback = object : OnBackPressedCallback(true) {
-//            override fun handleOnBackPressed() {
-//                // Leave this method empty to disable the back press
-//            }
-//        }
-//
-//        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, onBackPressedCallback)
-//
-//
-//        binding.LoginBtn.setOnClickListener {
-//            findNavController().navigate(R.id.otpLoginToOtpSend)
-//        }
-//
-//
-//    }
-//
-//
-//
-//}
-
-
-
-
-
-
-
-
-
-//
-//@AndroidEntryPoint
-//class FragmentLogin : Fragment() {
-//    private var _binding: FragmentLoginBinding? = null
-//    private val binding get() = _binding!!
-//    private val viewModel: OtpLoginViewModel by viewModels()
-//
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?,
-//        savedInstanceState: Bundle?
-//    ): View? {
-//        _binding = FragmentLoginBinding.inflate(inflater, container, false)
-//        binding.viewModel = viewModel
-//        binding.lifecycleOwner = viewLifecycleOwner
-//        return binding.root
-//    }
-//
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//
-//        // Disable the back press
-//        val callback = object : OnBackPressedCallback(true) {
-//            override fun handleOnBackPressed() {
-//                // Leave this method empty to disable the back press
-//            }
-//        }
-//        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-//
-//        // Set input filter and TextWatcher for the mobile number EditText
-//        binding.etEmail.filters = arrayOf<InputFilter>(InputFilter.LengthFilter(10))
-//        binding.etEmail.addTextChangedListener(object : TextWatcher {
-//            override fun afterTextChanged(s: Editable?) {
-//                // No action needed after text change
-//            }
-//
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//                // No action needed before text change
-//            }
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                if (s?.length ?: 0 > 10) {
-//                    binding.etEmail.setText(s?.substring(0, 10))
-//                    binding.etEmail.setSelection(10)
-//                }
-//            }
-//        })
-//
-//        // Observe the login result
-////        viewModel.loginResult.observe(viewLifecycleOwner, Observer { state ->
-////            when (state) {
-////                is ApiState.Success -> {
-////                    if (state.data.status == "success") {
-////                        findNavController().navigate(R.id.otpLoginToOtpSend)
-////                    } else {
-////                        // Handle the failure status
-////                        // Show the status message
-////                        requireContext().showToast("User not exist")
-////
-////                    }
-////                }
-////                is ApiState.Failure -> {
-////                    // Handle the error
-//////                    binding.statusMessage.text = "Login failed: ${state.error}"
-////                }
-////                else -> {}
-////            }
-////        })
-////
-////        // Set click listener for the login button
-////        binding.LoginBtn.setOnClickListener {
-////            val username = binding.etEmail.text.toString()
-////            val password = binding.etPassword.text.toString()
-////            val authRequest = AuthRequest(username, password, "authUsername", "authPassword")
-////            viewModel.login(authRequest)
-////        }
-//
-//
-//
-//
-//
-//    }
-//
-//
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//        _binding = null
-//    }
-//}
 
 
 

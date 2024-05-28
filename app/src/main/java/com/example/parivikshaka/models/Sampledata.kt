@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 
 
         data class Sampledata(
-           val id: Int,
+            val id: String,
             val agentName: String?,
             val assignmentId: String?
         )

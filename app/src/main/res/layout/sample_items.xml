@@ -439,11 +439,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="70dp"
             android:background="@drawable/button"
             android:text="collect samples"
             android:textColor="#fff"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/VerifyBtn"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/LicenseName" />
 
@@ -454,11 +453,10 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:background="@drawable/buttonverify"
-            android:text="collect samples"
             android:backgroundTint="#008000"
+            android:text="collect samples"
             android:textColor="#fff"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/SampleBtn"
             app:layout_constraintTop_toBottomOf="@+id/LicenseName" />
 
 

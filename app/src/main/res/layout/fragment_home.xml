@@ -46,6 +46,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/amazonImage">
             <androidx.cardview.widget.CardView
+
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
@@ -95,13 +96,13 @@
                         android:layout_marginTop="10dp"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@+id/elecImage"/>
+
                     <ImageView
+                        android:id="@+id/elecImage"
                         android:layout_width="100dp"
                         android:layout_height="70dp"
-                        android:id="@+id/elecImage"
-                        android:src="@drawable/sampleassigned"
                         android:layout_marginTop="15dp"
-                        android:layout_centerHorizontal="true"/>
+                        android:src="@drawable/sampleassigned" />
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>

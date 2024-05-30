@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="regNo"
+            type="String" />
+        <variable
+            name="applicationName"
+            type="String" />
+        <variable
+            name="applicationConcern"
+            type="String" />
+        <variable
+            name="address"
+            type="String" />
+    </data>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/regNoTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{`Reg No: ` + regNo}'
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/applicationNameTextView"
+            android:layout_below="@id/regNoTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{`Application Name: ` + applicationName}'
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/applicationConcernTextView"
+            android:layout_below="@id/applicationNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{`Application Concern: ` + applicationConcern}'
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/addressTextView"
+            android:layout_below="@id/applicationConcernTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text='@{`Address: ` + address}'
+            android:textSize="16sp" />
+    </RelativeLayout>
+</layout>

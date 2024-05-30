@@ -1,12 +1,11 @@
 package com.example.parivikshaka.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.parivikshaka.databinding.CardItemsBinding
-import com.example.parivikshaka.models.SPTLDetailsList
-import com.example.parivikshaka.models.TargetList
+import com.example.parivikshaka.fragments.CardSampleFragment
 
 class CardItemAdapter: RecyclerView.Adapter<CardItemAdapter.ViewHolder>() {
 
@@ -18,7 +17,10 @@ class CardItemAdapter: RecyclerView.Adapter<CardItemAdapter.ViewHolder>() {
         // Bind data to views
         fun bind(item: String) {
         binding.CardItems.text = item
+            binding.CardItems.setOnClickListener{
 
+
+            }
         }
     }
 

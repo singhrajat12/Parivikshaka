@@ -19,6 +19,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.parivikshaka.R
+import com.example.parivikshaka.SharedPreferenceCommon
 import com.example.parivikshaka.databinding.FragmentOtpEnterBinding
 import com.example.parivikshaka.db.ApiState
 import com.example.parivikshaka.models.AuthRequest
@@ -29,10 +30,13 @@ import com.example.parivikshaka.utils.showToast
 
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FragmentEnterOTP : Fragment() {
 
+    @Inject
+    lateinit var sharedPreferenceCommon: SharedPreferenceCommon
     private val mBinding by lazy { FragmentOtpEnterBinding.inflate(layoutInflater) }
     private val mViewModal: FragmentEnterOTViewModel by viewModels()
     private val viewmodal: OtpLoginViewModel by viewModels()
@@ -53,6 +57,11 @@ class FragmentEnterOTP : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
+
+
         arguments?.let {
             number = it.getString("MobileNo")
             Username= it.getString("Username")
@@ -139,11 +148,15 @@ class FragmentEnterOTP : Fragment() {
                                 "SUCCESS" -> {
                                      otpget=state.data.OTP
 
+
+
+
                                 }
                                 "FAILURE" -> {
                                     requireContext().showToast("OTP Not Found")
                                 }
 
+                                else -> {}
                             }
                         }
                         is ApiState.Failure -> {

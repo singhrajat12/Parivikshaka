@@ -81,6 +81,28 @@
         <action
             android:id="@+id/action_cardSampleFragment_to_fragment_Sample"
             app:destination="@id/fragment_Sample" />
+
+        <action
+            android:id="@+id/action_cardSampleFragment_to_targetDetailFragment"
+            app:destination="@id/targetDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/targetDetailFragment"
+        android:name="com.example.parivikshaka.fragments.TargetDetailFragment"
+        android:label="Target Detail Fragment" >
+        <argument
+            android:name="regNo"
+            app:argType="string" />
+        <argument
+            android:name="applicationName"
+            app:argType="string" />
+        <argument
+            android:name="applicationConcern"
+            app:argType="string" />
+        <argument
+            android:name="address"
+            app:argType="string" />
     </fragment>
 
 

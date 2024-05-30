@@ -117,6 +117,7 @@ class FragmentLogin : Fragment() {
 
                         when (state.data.Status?.toUpperCase()) {
                             "SUCCESS" -> {
+                                viewmodal.savelogin(state.data)
                                 val bundle = Bundle().apply {
                                     putString("Username", binding.etEmail.text.toString())
                                     putString("Password", binding.etPassword.text.toString())

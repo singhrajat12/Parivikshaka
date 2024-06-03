@@ -42,17 +42,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        arguments?.let {
-//            DistrictId = it.getInt("DistrictId")
-//            FinancialYearID = it.getInt("FinancialYearID")
-//            HobliId = it.getInt("HobliId")
-//            RoleID = it.getInt("RoleID")
-//            TalukId = it.getInt("TalukId")
-//            TypeId = it.getInt("TypeId")
-//            Username= it.getString("Username")
-//            Password= it.getString("Password")
-//
-//        }
 
         // Set up the onBackPressedCallback to intercept the back button press
         onBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -60,6 +49,11 @@ class HomeFragment : Fragment() {
                 // Leave this method empty to disable the back press
             }
         }
+
+         binding.AssignedCard.setOnClickListener {
+             findNavController().navigate(R.id.action_fragment_home_to_SampleFragment)
+         }
+
 
 
         binding.clothingCard.setOnClickListener {

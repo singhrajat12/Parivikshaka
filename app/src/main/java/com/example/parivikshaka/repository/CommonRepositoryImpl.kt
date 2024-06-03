@@ -1,5 +1,6 @@
 package com.example.parivikshaka.repository
 
+import android.util.Log
 import com.example.parivikshaka.SharedPreferenceCommon
 import com.example.parivikshaka.db.ApiServices
 import com.example.parivikshaka.db.ApiState
@@ -7,8 +8,12 @@ import com.example.parivikshaka.db.CommonApiService
 import com.example.parivikshaka.db.TokenApiService
 import com.example.parivikshaka.db.toResultFlow
 import com.example.parivikshaka.models.AuthRequest
-
-import com.example.parivikshaka.models.Sampledata
+import com.example.parivikshaka.models.DistrictList
+import com.example.parivikshaka.models.DistrictResponse
+import com.example.parivikshaka.models.HobliResponse
+import com.example.parivikshaka.models.SampleRequest
+import com.example.parivikshaka.models.TalukList
+import com.example.parivikshaka.models.TalukResponse
 import com.example.parivikshaka.models.TargetListRequest
 import com.example.parivikshaka.models.TargetRequest
 import com.example.parivikshaka.models.User
@@ -38,10 +43,10 @@ class CommonRepositoryImpl @Inject constructor(
 
 
 
-    suspend fun fetchItems(): List<Sampledata>{
-        return apiService.getItems()
-
+    fun SampleFetechData(sampleRequest: SampleRequest) = toResultFlow {
+        apiService.GetSample(sampleRequest)
     }
+
 
 //    suspend fun fetchCardItem(): List<CardSampleData>{
 //        return apiService.fetchCardItems()
@@ -56,5 +61,19 @@ class CommonRepositoryImpl @Inject constructor(
     }
 
 
+
+    fun getTaluks(username: String, password: String, districtId: Int): Flow<ApiState<TalukResponse>> = toResultFlow {
+        apiService.getTaluks(username, password, districtId)
+    }
+
+    fun getHobli(username: String, password: String, districtId: Int, talukId: Int): Flow<ApiState<HobliResponse>> = toResultFlow {
+        apiService.getHobli(username, password, districtId,talukId)
+    }
+
+    fun getDistricts(username: String, password: String): Flow<ApiState<DistrictResponse>> {
+        return toResultFlow {
+            apiService.getDistricts(username, password)
+        }
+    }
 
 }

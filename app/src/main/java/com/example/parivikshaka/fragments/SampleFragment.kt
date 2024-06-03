@@ -1,98 +1,162 @@
 package com.example.parivikshaka.fragments
 
+import android.R
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.parivikshaka.adapters.SampleAdapter
 import com.example.parivikshaka.databinding.FragmentSampleBinding
-import com.example.parivikshaka.models.Sampledata
+import com.example.parivikshaka.models.AuthRequest
+import com.example.parivikshaka.models.DistrictList
+import com.example.parivikshaka.models.HobliList
+import com.example.parivikshaka.models.TalukList
+import dagger.hilt.android.AndroidEntryPoint
 
-class SampleFragment : Fragment(), SampleAdapter.OnItemClickListener {
+@AndroidEntryPoint
+class SampleFragment:Fragment() {
 
-    private lateinit var binding: FragmentSampleBinding
-    private lateinit var itemsAdapter: SampleAdapter
-    private var currentPage = 1
-    private val pageSize = 20
-
+    val binding by lazy {
+        FragmentSampleBinding.inflate(layoutInflater).apply {
+            viewModel = model
+        }
+    }
+    var districtNames:List<String> = emptyList();
+    var districtid: Int?=-1
+    val model:SampleViewModel by viewModels()
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSampleBinding.inflate(inflater, container, false)
+    ): View? {
+        binding.lifecycleOwner = requireActivity()
+        binding.viewModel = model
+        binding.executePendingBindings()
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupRecyclerView()
-        fetchCardItems()
-        setupClickListeners()
-    }
 
-    private fun setupRecyclerView() {
-        itemsAdapter = SampleAdapter(listener = this)
-        binding.viewTicketRecyclerView.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = itemsAdapter
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                    val visibleItemCount = layoutManager.childCount
-                    val totalItemCount = layoutManager.itemCount
-                    val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
-
-                    if (visibleItemCount + firstVisibleItemPosition >= totalItemCount
-                        && firstVisibleItemPosition >= 0
-                    ) {
-                        fetchNextPage()
-                    }
+        model.districtList.observe(viewLifecycleOwner, Observer { districts ->
+             districtNames = districts.map { it.DistrictName ?: "" } // Assuming DistrictName is a property of DistrictList
+            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, districtNames)
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            binding.DistrictType.adapter = adapter
+            binding.DistrictType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                    // Fetch districts with the provided username and password
+                    districtid=districts.get(position).DistrictId?:-1
+                    model.fetchTaluks("AgriDept", "AD@432!",districts.get(position).DistrictId?:-1)
                 }
-            })
-        }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    Toast.makeText(requireContext(), "No district selected", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
+// Observe error LiveData to show error messages
+        model.error.observe(viewLifecycleOwner, Observer { errorMessage ->
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+        })
+
+// Set OnItemSelectedListener to fetch districts when an item is selected
+
+
+
+
+        model.talukList.observe(viewLifecycleOwner, Observer { taluks ->
+            val talukNames = taluks.map { it.TalukName ?: "" }
+            val adapter = ArrayAdapter(requireContext(), R.layout.simple_dropdown_item_1line, talukNames)
+            binding.TalukType.adapter = adapter
+            binding.TalukType.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+
+
+                    // Call the ViewModel method to fetch Taluks based on the selected DistrictId
+                    model.fetchHobli("AgriDept", "AD@432!", districtid?:-1, talukId = taluks.get(position).TalukId?:-1)
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    Toast.makeText(requireContext(), "No Taluck selected", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
+        model.error.observe(viewLifecycleOwner, Observer { errorMessage ->
+
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+        })
+
+
+
+
+
+
+//        model.fetchTaluks("AgriDept", "AD@432!" )
+
+
+        model.hobliList.observe(viewLifecycleOwner, Observer { hoblis ->
+            val hobliNames = hoblis.map { it.HobliName ?: "" }
+            val adapter = ArrayAdapter(requireContext(), R.layout.simple_dropdown_item_1line, hobliNames)
+            binding.Hobliype.adapter = adapter
+            binding.Hobliype.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {
+                    Toast.makeText(requireContext(), "No Taluck selected", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
+
+        model.error.observe(viewLifecycleOwner, Observer { errorMessage ->
+            Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+        })
+
+
+
     }
-
-    private fun fetchCardItems() {
-        val cardItems = getCardItemsFromRepository(currentPage)
-        itemsAdapter.updateItems(cardItems)
-    }
-
-    private fun fetchNextPage() {
-        currentPage++
-        val cardItems = getCardItemsFromRepository(currentPage)
-        itemsAdapter.addItems(cardItems)
-    }
-
-    private fun getCardItemsFromRepository(page: Int): List<Sampledata> {
-        val sampleDataList = mutableListOf<Sampledata>()
-        val startIndex = (page - 1) * pageSize + 1
-        val endIndex = startIndex + pageSize - 1
-        for (i in startIndex..endIndex) {
-            // Create Sampledata with actual data or null for optional parameters
-            sampleDataList.add(Sampledata("$i", "Agent $i", "Assignment $i"))
-        }
-        return sampleDataList
-    }
+}
 
 
-//    override fun onItemClick(item: CardSampleData) {
-//        findNavController().navigate(R.id.action_cardSampleFragment_to_fragment_Sample)
+
+
+
+
+//    private fun onClick() {
+//
+////        binding.arrowBack.setOnClickListener {
+////            findNavController().popBackStack()
+////        }
+//
 //    }
 
-    private fun setupClickListeners() {
-        binding.backArrow.setOnClickListener {
-            findNavController().popBackStack()
+    var watcher: TextWatcher = object : TextWatcher {
+        override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            //YOUR CODE
+        }
+
+        override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            //YOUR CODE
+        }
+
+        override fun afterTextChanged(s: Editable) {
+
+
         }
     }
-
-    override fun onItemClick(item: Sampledata) {
-
-    }
-
-
-}

@@ -168,7 +168,7 @@ class CardSampleFragment : Fragment() {
                 ).collect { state: ApiState<TargetList> ->
                     when (state) {
                         is ApiState.Loading -> {
-                            // Handle loading state if needed
+                            binding.mainProgressBar.visibility = View.VISIBLE
                         }
                         is ApiState.Success -> {
                             when (state.data.Status) {
@@ -197,7 +197,7 @@ class CardSampleFragment : Fragment() {
 
     private fun handleTargetResponse(data: TargetList) {
        val applicationNames = data.SPTLDetailsList.map { it.ApplicationName ?: "" }
-        itemsAdapter.updateItems(applicationNames)
+        itemsAdapter.updateItems(data.SPTLDetailsList)
     }
 
 
